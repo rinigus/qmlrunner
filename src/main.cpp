@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
   QQmlApplicationEngine engine;
   for (const auto &p: paths)
-    engine.addImportPath(p);
+    engine.addPluginPath(p);
 
   engine.load(qmlpath);
   if (engine.rootObjects().isEmpty())
