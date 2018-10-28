@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         prefix = arguments.at(i+1);
         ++i;
       }
-    else if (arguments.at(i) == "-plugin" && i+1 < size)
+    else if (arguments.at(i) == "-path" && i+1 < size)
       {
         paths.push_back(arguments.at(i+1));
         ++i;
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
   if (appName.isEmpty())
     {
-      std::cerr << "Usage: " << argv[0] << " [-P prefix] [-plugin path] appname\n";
+      std::cerr << "Usage: " << argv[0] << " [-P prefix] [-path path] appname\n";
       std::cerr << "Loaded QML is determined by prefix and appname as follows:\n"
                 << " prefix/appname/qml/appname.qml\n"
                 << "by default, prefix is /usr/share\n";
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
   QQmlApplicationEngine engine;
   for (const auto &p: paths)
-    engine.addPluginPath(p);
+    engine.addImportPath(p);
 
   engine.load(qmlpath);
   if (engine.rootObjects().isEmpty())
