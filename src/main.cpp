@@ -19,7 +19,8 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QGuiApplication>
+#include <QApplication>
+#include <QIcon>
 #include <QStringList>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -28,10 +29,10 @@
 
 int main(int argc, char *argv[])
 {
-  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-  QGuiApplication app(argc, argv);
-  
+  QApplication app(argc, argv);
+
   const QStringList arguments = QCoreApplication::arguments();
   QString appName;
   QString prefix = "/usr/share";
@@ -70,6 +71,14 @@ int main(int argc, char *argv[])
   app.setApplicationName(appName);
   app.setOrganizationName(appName);
   app.setApplicationVersion("1.0");
+
+  // add fallback icon path
+  QStringList icons = QIcon::themeSearchPaths();
+  QString icons_extra_path = dir.absoluteFilePath(appName + "/icons");
+  if (QFileInfo::exists(icons_extra_path)) {
+      icons.append(icons_extra_path);
+      QIcon::setThemeSearchPaths(icons);
+    }
 
   QQmlApplicationEngine engine;
   for (const auto &p: paths)
