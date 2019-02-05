@@ -72,12 +72,11 @@ int main(int argc, char *argv[])
   app.setOrganizationName(appName);
   app.setApplicationVersion("1.0");
 
+
   // add fallback icon path
-  QStringList icons = QIcon::themeSearchPaths();
   QString icons_extra_path = dir.absoluteFilePath(appName + "/icons");
   if (QFileInfo::exists(icons_extra_path)) {
-      icons.append(icons_extra_path);
-      QIcon::setThemeSearchPaths(icons);
+      QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << icons_extra_path);
     }
 
   QQmlApplicationEngine engine;
