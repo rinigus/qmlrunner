@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Rinigus https://github.com/rinigus
+ * Copyright (C) 2018-2019 Rinigus https://github.com/rinigus
  *
  * This file is part of QML Runner.
  *
@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QIcon>
 #include <QStringList>
+#include <QTranslator>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 
@@ -72,6 +73,16 @@ int main(int argc, char *argv[])
   app.setOrganizationName(appName);
   app.setApplicationVersion("1.0");
 
+  // add translations
+  QString transpath = dir.absoluteFilePath(appName + "/translations");
+  QTranslator translator;
+  if (translator.load(QLocale(), appName, QLatin1String("-"), transpath))
+    {
+      std::cout << "Loaded translation\n";
+      app.installTranslator(&translator);
+    }
+  else
+    std::cout << "Translation not found\n";
 
   // add fallback icon path
   QString icons_extra_path = dir.absoluteFilePath(appName + "/icons");
