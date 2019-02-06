@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
   // add translations
   QString transpath = dir.absoluteFilePath(appName + "/translations");
   QTranslator translator;
+  std::cout << "Current locale: " << QLocale().name().toStdString() << "\n";
   if (translator.load(QLocale(), appName, QLatin1String("-"), transpath))
     {
       std::cout << "Loaded translation\n";
