@@ -30,7 +30,15 @@
 
 int main(int argc, char *argv[])
 {
-  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  // parse options that have to be applied before creation of QApplication
+  for (int i = 1; i < argc; ++i)
+    {
+      const char *arg = argv[i];
+      if (!qstrcmp(arg, "-scale"))
+        QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+      else if (!qstrcmp(arg, "-noscale"))
+        QGuiApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+    }
 
   QApplication app(argc, argv);
 
@@ -54,10 +62,11 @@ int main(int argc, char *argv[])
 
   if (appName.isEmpty())
     {
-      std::cerr << "Usage: " << argv[0] << " [-P prefix] [-path path] appname\n";
+      std::cerr << "Usage: " << argv[0] << " [-P prefix] [-path path] [-scale] [-noscale] appname\n";
       std::cerr << "Loaded QML is determined by prefix and appname as follows:\n"
                 << " prefix/appname/qml/appname.qml\n"
-                << "by default, prefix is /usr/share\n";
+                << "by default, prefix is /usr/share\n"
+                << "scale/noscale either applies AA_EnableHighDpiScaling or AA_DisableHighDpiScaling\n";
       return -1;
     }
   
