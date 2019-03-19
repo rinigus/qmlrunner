@@ -47,8 +47,18 @@ int main(int argc, char *argv[])
   QString prefix = "/usr/share";
   QStringList paths;
   for (int i = 1, size = arguments.size(); i < size; ++i)
-    if (!arguments.at(i).startsWith(QLatin1Char('-')))
-      appName = arguments.at(i);
+    if (arguments.at(i) == "--")
+      break; // following options are options for the application
+    else if (!arguments.at(i).startsWith(QLatin1Char('-')))
+      {
+        if (appName.isEmpty())
+          appName = arguments.at(i);
+        else
+          {
+            std::cerr << "Application name specified multiple times\n";
+            return -2;
+          }
+      }
     else if (arguments.at(i) == "-P" && i+1 < size)
       {
         prefix = arguments.at(i+1);
@@ -59,10 +69,15 @@ int main(int argc, char *argv[])
         paths.push_back(arguments.at(i+1));
         ++i;
       }
+    else
+      {
+        std::cerr << "Unknown option: " << arguments.at(i).toStdString() << "\n";
+        return -3;
+      }
 
   if (appName.isEmpty())
     {
-      std::cerr << "Usage: " << argv[0] << " [-P prefix] [-path path] [-scale] [-noscale] appname\n";
+      std::cerr << "Usage: " << argv[0] << " [-P prefix] [-path path] [-scale] [-noscale] appname [--] [application_options]\n";
       std::cerr << "Loaded QML is determined by prefix and appname as follows:\n"
                 << " prefix/appname/qml/appname.qml\n"
                 << "by default, prefix is /usr/share\n"
