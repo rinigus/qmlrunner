@@ -25,6 +25,7 @@
 #include <QTranslator>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
+#include <QtGlobal>
 
 #include <iostream>
 
@@ -109,12 +110,14 @@ int main(int argc, char *argv[])
   else
     std::cout << "Translation not found\n";
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
   // add fallback icon path
   QString icons_extra_path = dir.absoluteFilePath(appName + "/icons");
   if (QFileInfo::exists(icons_extra_path)) {
       QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << icons_extra_path);
     }
-
+#endif
+  
   QQmlApplicationEngine engine;
   for (const auto &p: paths)
     engine.addImportPath(p);
