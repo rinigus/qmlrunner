@@ -70,6 +70,10 @@ int main(int argc, char *argv[])
         paths.push_back(arguments.at(i+1));
         ++i;
       }
+    else if (arguments.at(i) == "-noscale" || arguments.at(i) == "-scale")
+      {
+        // have been processed above
+      }
     else
       {
         std::cerr << "Unknown option: " << arguments.at(i).toStdString() << "\n";
