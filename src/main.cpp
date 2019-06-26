@@ -101,6 +101,7 @@ int main(int argc, char *argv[])
   app.setApplicationName(appName);
   app.setOrganizationName(appName);
   app.setApplicationVersion("1.0");
+  app.setDesktopFileName(appName + ".desktop");
 
   // add translations
   QString transpath = dir.absoluteFilePath(appName + "/translations");
